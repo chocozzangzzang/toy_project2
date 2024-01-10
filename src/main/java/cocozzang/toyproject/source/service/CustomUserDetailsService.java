@@ -23,10 +23,12 @@ public class CustomUserDetailsService implements UserDetailsService {
         UserEntity userdata = userRepository.findByUsername(username);
 
         if(userdata != null) {
-
+            // id가 제대로 전달되는지 체크
+            System.out.println("userdata id : " + userdata.getUsername());
             return new CustomUserDetails(userdata);
-
         }
+        // id가 없는 경우 체크
+        System.out.println("There is any id");
         return null;
     }
 }

@@ -22,6 +22,8 @@ public class SecurityConfig {
     }
 
     /*
+        Role Hierarchy :
+        A,B,C 권한이 있을 때 A < B < C 와 같은 권한의 계층을 설정하고자 하는 경우 사용
 
     @Bean
     public RoleHierarchy roleHierarchy() {
@@ -53,11 +55,6 @@ public class SecurityConfig {
 
         // 권한은 위에서부터 실행되므로 주의해서 작성할 것
 
-        /*
-            Role Hierarchy :
-            A,B,C 권한이 있을 때 A < B < C 와 같은 권한의 계층을 설정하고자 하는 경우 사용
-         */
-
         http
                 .authorizeHttpRequests((auth) -> auth
                         .requestMatchers("/", "/login", "/loginProc", "/join", "/joinProc").permitAll()
@@ -67,7 +64,7 @@ public class SecurityConfig {
         
         // 커스텀 로그인 - formLogin 방식
         http
-                .formLogin((auth) -> auth.loginPage("/login")
+                   .formLogin((auth) -> auth.loginPage("/login")
                         .loginProcessingUrl("/loginProc").permitAll().defaultSuccessUrl("/"));
 
         // Http Basic 인증 방식 -- 아이디와 비밀번호를 Base64 방식으로 인토딩하여
@@ -129,7 +126,5 @@ public class SecurityConfig {
 
         return new InMemoryUserDetailsManager(user1, user2);
     }
-
      */
-
 }
