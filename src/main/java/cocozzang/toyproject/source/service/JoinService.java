@@ -32,6 +32,7 @@ public class JoinService{
 
         userData.setUsername(joinDTO.getUsername());
         userData.setPassword(bCryptPasswordEncoder.encode(joinDTO.getPassword()));
+        userData.setApikey(joinDTO.getApikey());
         userData.setRole("ROLE_USER");
 
         userRepository.save(userData);

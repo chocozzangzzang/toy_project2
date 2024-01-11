@@ -10,17 +10,14 @@
     Login Page
     <hr>
     <form action="/loginProc" method="post" name="loginForm">
-        <input id="username" type="text" name="username" placeholder="id"/>
-        <input id="password" type="password" name="password" placeholder="password"/>
-
+        <div><input id="username" type="text" name="username" placeholder="id"/></div>
+        <div><input id="password" type="password" name="password" placeholder="password"/></div>
         <!--csrf enable을 위해 token을 받아서 서버측으로 다시 전송하는 요소가 필요함-->
         <input type="hidden" name="_csrf" value="{{_csrf.token}}"/>
-
         <input type="submit" value="login"/>
     </form>
 </body>
 </html>
-
 <!--
     cf. ajax 요청
     <meta name="_csrf" content="{{_csrf.token}}"/>
@@ -32,4 +29,3 @@
     logout은 반드시 POST 요청으로 설정해야함 (csrf enable인 경우)
     혹은, GetMapping으로 가로채서 로그아웃을 진행할 수 있음
     SecurityContextHolder를 통해 설정
--->
