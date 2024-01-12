@@ -1,5 +1,6 @@
 package cocozzang.toyproject.source.controller;
 
+import cocozzang.toyproject.source.dto.HexaDTO;
 import cocozzang.toyproject.source.dto.UserDTO;
 import cocozzang.toyproject.source.service.UserService;
 import lombok.Getter;
@@ -44,6 +45,7 @@ public class MainController {
         String role = grantedAuthority.getAuthority();
 
         UserDTO userdata = new UserDTO();
+        List<HexaDTO> hexaDTOList = new ArrayList<>();
         if (!Objects.equals(id, "anonymousUser")) {
             userdata = userService.rtUser(id);
 
@@ -96,18 +98,22 @@ public class MainController {
             String res2 = entity2.getBody();
             JSONObject jsonObject2 = new JSONObject(res2);
             JSONArray jsonArray = jsonObject2.getJSONArray("character_hexa_core_equipment");
+
             for(int i = 0; i < jsonArray.length(); i++) {
                 JSONObject tempObj = (JSONObject) jsonArray.get(i);
-                System.out.println(tempObj.get("hexa_core_name"));
-                System.out.println(tempObj.get("hexa_core_level"));
-                System.out.println("==============================");
+                HexaDTO hexaDTO = new HexaDTO();
+                hexaDTO.setSkillname((String) tempObj.get("hexa_core_name"));
+                hexaDTO.setSkilllevel(tempObj.get("hexa_core_level").toString());
+                System.out.println("skill name : " + hexaDTO.getSkillname() + " :: skill level : " + hexaDTO.getSkilllevel());
+                hexaDTOList.add(hexaDTO);
             }
 
         }
 
         model.addAttribute("id", id);
         model.addAttribute("role", role);
-        model.addAttribute("apikey", userdata.getApikey());
+        //model.addAttribute("apikey", userdata.getApikey());
+        model.addAttribute("hexaList", hexaDTOList);
 
         return "main";
     }
