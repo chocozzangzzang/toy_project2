@@ -1,31 +1,25 @@
-var main = {
-    init : function() {
-        var _this = this;
-        $('#btn-save').on('click', function() {
-            alert($('#title').val());
-            _this.save();
+
+$(document).ready(function() {
+    $("#btn-save").click(function() {
+
+        var header = $("meta[name='_csrf_header']").attr("content");
+        var token = $("meta[name='_csrf']").attr("content");
+
+        var tempData =
+        {
+            "title" : $("#title").val(),
+            "content" : $("#content").val()
+        }
+
+        $.ajax({
+                type : "post",
+                url : "/board/write",
+                data : JSON.stringify(tempData),
+                beforeSend : function(xhr) {xhr.setRequestHeader(header, token);},
+                contentType : "application/json; charset=UTF-8",
+                success : function() {
+                    window.location.href="/board";
+                }
         });
-    },
-
-    save : function() {
-
-       $.ajax({
-            type : 'POST',
-            url : '/board/write',
-            data : {
-                title : $('#title').val(),
-                writer : $('#writer').val(),
-                content : $('#content').val()
-            },
-            contentType : "application/json; charset=UTF-8",
-            success : function(data) {
-                alert("success");
-            },
-            error : function() {
-                alert("error");
-            }
-        });
-    }
-};
-
-main.init();
+    })
+});

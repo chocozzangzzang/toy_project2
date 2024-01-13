@@ -1,0 +1,15 @@
+{{>layout/header}}
+<meta name="_csrf" content="{{_csrf.token}}"/>
+<meta name="_csrf_header" content="{{_csrf.headerName}}"/>
+
+<h3>게시글 확인</h3>
+<br>
+<h3>게시글 번호 : # {{bid}}</h3>
+<br>
+<h5>게시글 제목 : {{title}}</h5>
+<br>
+<h5>작 성 자 : {{writer}}</h5>
+<br>
+<h5>게시글 내용 : {{content}}</h5>
+<br>
+{{>layout/footer}}

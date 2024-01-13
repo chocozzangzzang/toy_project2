@@ -1,4 +1,7 @@
 {{>layout/header}}
+<meta name="_csrf" content="{{_csrf.token}}"/>
+<meta name="_csrf_header" content="{{_csrf.headerName}}"/>
+
 <h1>게시글 등록</h1>
 
 <div class="col-md-12">
@@ -10,12 +13,13 @@
             </div>
             <div class="form-group">
                 <label for="writer"> 작성자</label>
-                <input type="text" class="form-control" id="writer" placeholder="작성자를 입력하세요">
+                <input type="text" class="form-control" value="{{writer}}" readonly>
             </div>
             <div class="form-group">
                 <label for="content"> 내용</label>
                 <textarea type="text" class="form-control" id="content" placeholder="내용을 입력하세요"></textarea>
             </div>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}">
         </form>
         <a href="/board" role="button" class="btn btn-secondary">취소</a>
         <button type="button" class="btn btn-primary" id="btn-save">등록</button>

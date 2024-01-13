@@ -18,15 +18,19 @@
                 <th>Title</th>
                 <th>Writer</th>
                 <th>Write Date</th>
+                <th>Modify Date</th>
             </tr>
             </thead>
             <tbody>
-            <tr>
-                <th>#1</th>
-                <th>test</th>
-                <th>tester</th>
-                <th>2024-01-12</th>
-            </tr>
+            {{#boardList}}
+                <tr>
+                    <th><a href="/board/{{boardId}}" style="text-decoration : none;">{{boardId}}</a></th>
+                    <th>{{title}}</th>
+                    <th>{{writer}}</th>
+                    <th>{{regTime}}</th>
+                    <th>{{modTime}}</th>
+                </tr>
+            {{/boardList}}
             </tbody>
         </table>
     </div>
