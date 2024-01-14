@@ -8,6 +8,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.util.List;
 import java.util.Map;
@@ -65,6 +66,20 @@ public class BoardController {
     @GetMapping("/board/delete")
     public void boardDetail(@RequestParam(value="bid") Long bid) {
         boardService.boardDelete(bid);
+    }
+
+    @ResponseBody
+    @PostMapping("/board/modify")
+    public void boardModify(@RequestBody Map<String, Object> map) {
+        Long bid = Long.valueOf((String) map.get("boardId"));
+    }
+
+    @GetMapping("/board/modifyPage")
+    public String modifyPage(@RequestParam(value="bid") Long bid, Model model) {
+        System.out.println(bid + "  called22!!!!!!!");
+        BoardDTO boardDTO = boardService.boardDetail(bid);
+        model.addAttribute("board", boardDTO);
+        return "boardModify";
     }
 
 }
