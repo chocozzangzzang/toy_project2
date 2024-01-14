@@ -44,4 +44,8 @@ public class BoardService {
     public BoardDTO boardDetail(Long bid) {
         return BoardDTO.entityToDTO(boardRepository.findById(bid).get());
     }
+
+    public void boardDelete(Long bid) {
+        boardRepository.deleteById(bid);
+    }
 }

@@ -56,7 +56,15 @@ public class BoardController {
         model.addAttribute("writer", boardDTO.getWriter());
         model.addAttribute("title", boardDTO.getTitle());
         model.addAttribute("content", boardDTO.getContent());
+        model.addAttribute("nowId", SecurityContextHolder.getContext().getAuthentication().getName());
 
         return "boardDetail";
     }
+
+    @ResponseBody
+    @GetMapping("/board/delete")
+    public void boardDetail(@RequestParam(value="bid") Long bid) {
+        boardService.boardDelete(bid);
+    }
+
 }
