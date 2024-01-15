@@ -48,4 +48,17 @@ public class BoardService {
     public void boardDelete(Long bid) {
         boardRepository.deleteById(bid);
     }
+
+    public void boardUpdate(BoardDTO boardDTO) {
+        BoardEntity boardEntity = new BoardEntity();
+
+        boardEntity.setId(boardDTO.getBoardId());
+        boardEntity.setWriter(boardDTO.getWriter());
+        boardEntity.setTitle(boardDTO.getTitle());
+        boardEntity.setContent(boardDTO.getContent());
+        boardEntity.setRegDate(boardDTO.getRegTime());
+        boardEntity.setModDate(boardDTO.getModTime());
+
+        boardRepository.save(boardEntity);
+    }
 }

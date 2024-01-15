@@ -4,4 +4,28 @@
 
 <h1>게시글 수정</h1>
 
+<div class="col-md-12">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="title">제목</label>
+                <input type="text" class="form-control" id="title" value="{{board.title}}">
+            </div>
+            <div class="form-group">
+                <label for="writer"> 작성자</label>
+                <input type="text" class="form-control" id="writer" value="{{board.writer}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="content"> 내용</label>
+                <textarea type="text" class="form-control" id="content">{{board.content}}</textarea>
+            </div>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+            <input type="hidden" id="boardId" value="{{board.boardId}}">
+            <input type="hidden" id="regTime" value="{{board.regTime}}">
+            <input type="hidden" id="modTime" value="{{modTime}}">
+        </form>
+        <a href="/board/{{board.boardId}}" role="button" class="btn btn-secondary">수정취소</a>
+        <button type="button" class="btn btn-primary" id="btn-modify-send">수정</button>
+    </div>
+</div>
 {{>layout/footer}}

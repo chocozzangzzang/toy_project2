@@ -47,18 +47,16 @@ public class MainController {
         UserDTO userdata = new UserDTO();
         List<HexaDTO> hexaDTOList = new ArrayList<>();
         if (!Objects.equals(id, "anonymousUser")) {
+
             userdata = userService.rtUser(id);
 
             String url = "https://open.api.nexon.com/maplestory/";
-
             URI uri = UriComponentsBuilder.fromHttpUrl(url)
                     .path("v1/id")
                     .queryParam("character_name", "유해삐")
                     .encode()
                     .build()
                     .toUri();
-
-            System.out.println("uri :: " + uri);
 
             RestTemplate restTemplate = new RestTemplate();
 
@@ -70,11 +68,9 @@ public class MainController {
 
             ResponseEntity<String> entity = restTemplate.exchange(request, String.class);
             String res = entity.getBody();
-            System.out.println(res);
 
             JSONObject jsonObject = new JSONObject(res);
             String ocid = jsonObject.getString("ocid");
-            System.out.println(ocid);
 
             URI uri2 = UriComponentsBuilder.fromHttpUrl(url)
                     .path("v1/character/hexamatrix")
@@ -83,8 +79,6 @@ public class MainController {
                     .encode()
                     .build()
                     .toUri();
-
-            System.out.println("uri :: " + uri2);
 
             RestTemplate restTemplate2 = new RestTemplate();
 
@@ -104,7 +98,6 @@ public class MainController {
                 HexaDTO hexaDTO = new HexaDTO();
                 hexaDTO.setSkillname((String) tempObj.get("hexa_core_name"));
                 hexaDTO.setSkilllevel(tempObj.get("hexa_core_level").toString());
-                System.out.println("skill name : " + hexaDTO.getSkillname() + " :: skill level : " + hexaDTO.getSkilllevel());
                 hexaDTOList.add(hexaDTO);
             }
 

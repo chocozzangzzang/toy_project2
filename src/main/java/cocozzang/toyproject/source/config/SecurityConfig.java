@@ -52,6 +52,9 @@ public class SecurityConfig {
                 .requestMatchers("/admin").hasAnyRole("C")
                 .anyRequest().authenticated();
      */
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().requestMatchers(PathRequest.toStaticResources().atCommonLocations());
+    }
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -64,7 +67,8 @@ public class SecurityConfig {
                         .requestMatchers("/board/**").hasAnyRole("ADMIN", "USER")
                         .requestMatchers("/admin").hasRole("ADMIN")
                         .anyRequest().authenticated());
-        
+
+
         // 커스텀 로그인 - formLogin 방식
         http
                    .formLogin((auth) -> auth.loginPage("/login")

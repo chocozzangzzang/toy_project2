@@ -10,6 +10,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
 
@@ -76,10 +77,27 @@ public class BoardController {
 
     @GetMapping("/board/modifyPage")
     public String modifyPage(@RequestParam(value="bid") Long bid, Model model) {
-        System.out.println(bid + "  called22!!!!!!!");
+
         BoardDTO boardDTO = boardService.boardDetail(bid);
         model.addAttribute("board", boardDTO);
+        model.addAttribute("modTime", String.valueOf(LocalDate.now()));
         return "boardModify";
+    }
+
+    @ResponseBody
+    @PostMapping("/board/modifyPage")
+    public void modifyPage(@RequestBody Map<String, Object> map) {
+
+        BoardDTO boardDTO = new BoardDTO(
+                Long.valueOf((String) map.get("boardId")),
+                (String) map.get("title"),
+                (String) map.get("writer"),
+                (String) map.get("content"),
+                (String) map.get("regTime"),
+                (String) map.get("modTime")
+        );
+
+        boardService.boardUpdate(boardDTO);
     }
 
 }

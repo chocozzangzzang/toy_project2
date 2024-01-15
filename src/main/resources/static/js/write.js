@@ -9,7 +9,7 @@ $(document).ready(function() {
         {
             "title" : $("#title").val(),
             "content" : $("#content").val()
-        }
+        };
 
         $.ajax({
                 type : "post",
@@ -71,7 +71,43 @@ $(document).ready(function() {
         }
     })
 
-    $("btn-modify-confirm").click(function() {
-        alert("here!!!!");
+    $("#btn-modify-confirm").click(function() {
+       alert("here!!!!");
+    })
+
+    $("#btn-modify-send").click(function() {
+
+        var header = $("meta[name='_csrf_header']").attr("content");
+        var token = $("meta[name='_csrf']").attr("content");
+
+        var boardId = $("#boardId").val();
+        var writer = $("#writer").val();
+        var title = $("#title").val();
+        var content = $("#content").val();
+        var regTime = $("#regTime").val();
+        var modTime = $("#modTime").val();
+
+        var tempData = {
+            "boardId" : boardId,
+            "writer" : writer,
+            "title" : title,
+            "content" : content,
+            "regTime" : regTime,
+            "modTime" : modTime
+        };
+
+        if(confirm("수정하시겠습니까?")) {
+            $.ajax({
+                type : "post",
+                url : "/board/modifyPage",
+                data : JSON.stringify(tempData),
+                beforeSend : function(xhr) {xhr.setRequestHeader(header, token);},
+                contentType : "application/json; charset=UTF-8",
+                success : function() {
+                    alert("수정완료");
+                    window.location.href="/board";
+                }
+            });
+        }
     })
 });
