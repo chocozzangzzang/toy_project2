@@ -110,4 +110,31 @@ $(document).ready(function() {
             });
         }
     })
+
+    $("#btn-comment-write").click(function() {
+
+        var header = $("meta[name='_csrf_header']").attr("content");
+        var token = $("meta[name='_csrf']").attr("content");
+
+        var nowUser = $("#nowUser").val();
+        var comment = $("#comment").val();
+
+        if (confirm("댓글을 작성하시겠습니까?")) {
+            $.ajax({
+                type : "post",
+                url : "/comment/write",
+                beforeSend : function(xhr) {xhr.setRequestHeader(header, token);},
+                data : JSON.stringify({
+                    "boardId" : $("#boardId").val(),
+                    "commentWriter" : $("#nowUser").val(),
+                    "comment" : $("#comment").val()
+                }),
+                contentType : "application/json; charset=UTF-8",
+                success : function() {
+                    alert("댓글이 작성되었습니다.");
+                    window.location.href="/board/" + $("#boardId").val();
+                }
+            })
+        }
+    })
 });

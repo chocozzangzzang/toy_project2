@@ -1,7 +1,9 @@
 package cocozzang.toyproject.source.controller;
 
 import cocozzang.toyproject.source.dto.BoardDTO;
+import cocozzang.toyproject.source.dto.CommentDTO;
 import cocozzang.toyproject.source.service.BoardService;
+import cocozzang.toyproject.source.service.CommentService;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -18,9 +20,11 @@ import java.util.Map;
 public class BoardController {
 
     private final BoardService boardService;
+    private final CommentService commentService;
 
-    public BoardController(BoardService boardService) {
+    public BoardController(BoardService boardService, CommentService commentService) {
         this.boardService = boardService;
+        this.commentService = commentService;
     }
 
     @GetMapping("/board")
@@ -59,6 +63,10 @@ public class BoardController {
         model.addAttribute("title", boardDTO.getTitle());
         model.addAttribute("content", boardDTO.getContent());
         model.addAttribute("nowId", SecurityContextHolder.getContext().getAuthentication().getName());
+
+        List<CommentDTO> commentDTO = commentService.boardComment(bid);
+        model.addAttribute("comments", commentDTO);
+        model.addAttribute("nowUser", SecurityContextHolder.getContext().getAuthentication().getName());
 
         return "boardDetail";
     }
