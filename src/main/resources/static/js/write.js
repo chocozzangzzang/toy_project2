@@ -137,4 +137,48 @@ $(document).ready(function() {
             })
         }
     })
+
+    var commentDeleteButtons = document.querySelectorAll(".btn-comment-delete");
+    var commentIds = document.querySelectorAll(".commentId");
+    var commentWriters = document.querySelectorAll(".commentWriter");
+    var nowUser = $("#nowUser").val();
+    var commentModifyButtons = document.querySelectorAll(".btn-comment-modify");
+
+    for(let i = 0; i < commentDeleteButtons.length; i++) {
+
+        commentDeleteButtons[i].addEventListener("click", function() {
+            var commentWriter = commentWriters[i].value;
+            var commentId = commentIds[i].value;
+
+            if (nowUser === commentWriter) {
+                if (confirm("댓글을 삭제하시겠습니까?")) {
+                    $.ajax({
+                        type : "get",
+                        url : "/comment/delete?cid=" + commentId,
+                        contentType : "json",
+                        success : function() {
+                            alert("삭제했습니다!!");
+                            window.location.href = "/board/" + $("#boardId").val();
+                        }
+                    });
+                }
+            } else {alert("댓글 작성자가 아닙니다.");}
+
+        });
+    }
+
+    for (let j = 0; j < commentModifyButtons.length; j++) {
+        commentModifyButtons[j].addEventListener("click", function() {
+
+            var commentWriter = commentWriters[j].value;
+            var commentId = commentIds[j].value;
+
+            if (nowUser === commentWriter) {
+                if (confirm("댓글을 수정하시겠습니까?")) {
+                    alert($("#comm_" + commentId).val());
+                }
+            } else {alert("댓글 작성자가 아닙니다.");}
+        })
+
+    }
 });

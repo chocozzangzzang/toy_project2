@@ -38,7 +38,11 @@ public class CommentService {
         commentEntity.setCommRegTime(commentDTO.getCommRegTime());
         commentEntity.setCommModTime(commentDTO.getCommModTime());
 
-        this.commentRepository.save(commentEntity);
+        commentRepository.save(commentEntity);
+    }
+
+    public void commentDelete(Long cid) {
+        commentRepository.deleteById(cid);
     }
 
 }

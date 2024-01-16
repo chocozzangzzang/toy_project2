@@ -3,9 +3,7 @@ package cocozzang.toyproject.source.controller;
 import cocozzang.toyproject.source.dto.CommentDTO;
 import cocozzang.toyproject.source.service.CommentService;
 import org.springframework.stereotype.Controller;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import java.time.LocalDate;
 import java.util.Map;
@@ -31,6 +29,12 @@ public class CommentController {
         commentDTO.setCommModTime(String.valueOf(LocalDate.now()));
 
         commentService.commentWrite(commentDTO);
+    }
+
+    @ResponseBody
+    @GetMapping("/comment/delete")
+    public void commentDelete(@RequestParam Long cid) {
+        commentService.commentDelete(cid);
     }
 
 }

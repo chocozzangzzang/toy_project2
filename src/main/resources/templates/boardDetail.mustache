@@ -27,16 +27,20 @@
         <th>댓글 작성 시간</th>
         <th>댓글 수정 시간</th>
         <th>삭제</th>
+        <th>수정</th>
     </tr>
     </thead>
     <tbody>
     {{#comments}}
         <tr>
             <th>{{commentWriter}}</th>
-            <th>{{comment}}</th>
+            <th><input type="hidden" id="comm_{{id}}" value="{{comment}}">{{comment}}</input></th>
             <th>{{commRegTime}}</th>
             <th>{{commModTime}}</th>
-            <th>==삭제버튼==</th>
+            <th><button type="button" class="btn btn-danger btn-comment-delete">삭제</button></th>
+            <th><button type="button" class="btn btn-secondary btn-comment-modify">수정</button></th>
+            <input type="hidden" class="commentWriter" value="{{commentWriter}}">
+            <input type="hidden" class="commentId" value="{{id}}">
         </tr>
     {{/comments}}
     </tbody>
