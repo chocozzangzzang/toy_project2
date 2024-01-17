@@ -45,4 +45,27 @@ public class CommentService {
         commentRepository.deleteById(cid);
     }
 
+    public CommentDTO getComment(Long cid) {
+
+        CommentEntity commentEntity = commentRepository.findById(cid).get();
+        CommentDTO commentDTO = CommentDTO.entityToDTO(commentEntity);
+
+        return commentDTO;
+    }
+
+    public void commentUpdate(CommentDTO commentDTO) {
+
+        CommentEntity commentEntity = new CommentEntity();
+
+        commentEntity.setId(commentDTO.getId());
+        commentEntity.setBid(commentDTO.getBid());
+        commentEntity.setCommentWriter(commentDTO.getCommentWriter());
+        commentEntity.setComment(commentDTO.getComment());
+        commentEntity.setCommRegTime(commentDTO.getCommRegTime());
+        commentEntity.setCommModTime(commentDTO.getCommModTime());
+
+        System.out.println(commentEntity);
+        commentRepository.save(commentEntity);
+    }
+
 }

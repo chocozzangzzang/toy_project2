@@ -37,4 +37,19 @@ public class CommentController {
         commentService.commentDelete(cid);
     }
 
+    @ResponseBody
+    @PostMapping("/comment/update")
+    public void commentUpdate(@RequestBody Map<String, Object> map) {
+
+        System.out.println(map);
+
+        Long cid = Long.valueOf((String) map.get("commentID"));
+        CommentDTO commentDTO = commentService.getComment(cid);
+        commentDTO.setComment((String) map.get("commentUpdate"));
+        commentDTO.setCommModTime(String.valueOf(LocalDate.now()));
+
+        System.out.println(commentDTO);
+        commentService.commentUpdate(commentDTO);
+    }
+
 }

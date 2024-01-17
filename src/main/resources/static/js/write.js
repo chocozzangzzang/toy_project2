@@ -168,17 +168,43 @@ $(document).ready(function() {
     }
 
     for (let j = 0; j < commentModifyButtons.length; j++) {
-        commentModifyButtons[j].addEventListener("click", function() {
+        commentModifyButtons[j].addEventListener("click", (e) => {
+            e.preventDefault();
 
+            var header = $("meta[name='_csrf_header']").attr("content");
+            var token = $("meta[name='_csrf']").attr("content");
             var commentWriter = commentWriters[j].value;
             var commentId = commentIds[j].value;
 
             if (nowUser === commentWriter) {
                 if (confirm("댓글을 수정하시겠습니까?")) {
-                    alert($("#comm_" + commentId).val());
+                    var nowElement = document.getElementById("comm_" + commentId);
+                    var beforeValue = nowElement.textContent;
+                    console.log(beforeValue);
+                    nowElement.value = "";
+                    nowElement.innerHTML
+                    = "<textarea id='comm_modi_" + commentId + "'>" + beforeValue + "</textarea><br><button type='button' id='modi_btn_" + commentId + "' class='btn btn-secondary'>수정</button>"
+                    //nowElement.parentNode.replaceChild(document.createElement("textarea"), nowElement);
+
+                    document.getElementById("modi_btn_" + commentId).addEventListener("click", function() {
+                        $.ajax({
+                            type : "post",
+                            url : "/comment/update",
+                            beforeSend : function(xhr) {xhr.setRequestHeader(header, token);},
+                            data : JSON.stringify({
+                                "commentID" : commentId,
+                                "commentUpdate" : document.getElementById("comm_modi_" + commentId).value
+                            }),
+                            contentType : "application/json; charset=UTF-8",
+                            success : function() {
+                                window.location.href = "/board/" + $("#boardId").val();
+                            }
+                        })
+                    });
                 }
             } else {alert("댓글 작성자가 아닙니다.");}
         })
-
     }
+
+
 });
