@@ -68,4 +68,8 @@ public class CommentService {
         commentRepository.save(commentEntity);
     }
 
+    public void commentDeleteByBid(Long bid) {
+        commentRepository.deleteByBid(bid);
+    }
+
 }

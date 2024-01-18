@@ -75,6 +75,7 @@ public class BoardController {
     @GetMapping("/board/delete")
     public void boardDetail(@RequestParam(value="bid") Long bid) {
         boardService.boardDelete(bid);
+        commentService.commentDeleteByBid(bid);
     }
 
     @ResponseBody
