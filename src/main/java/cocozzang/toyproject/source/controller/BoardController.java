@@ -4,13 +4,21 @@ import cocozzang.toyproject.source.dto.BoardDTO;
 import cocozzang.toyproject.source.dto.CommentDTO;
 import cocozzang.toyproject.source.service.BoardService;
 import cocozzang.toyproject.source.service.CommentService;
-import org.json.JSONException;
-import org.json.JSONObject;
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import jakarta.servlet.http.HttpServletRequest;
+import org.json.simple.JSONObject;
+import org.json.simple.parser.JSONParser;
+import org.json.simple.parser.ParseException;
+import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+import org.springframework.web.multipart.MultipartFile;
+import java.io.File;
 
 import java.time.LocalDate;
 import java.util.List;
@@ -42,15 +50,39 @@ public class BoardController {
     }
 
     @ResponseBody
-    @PostMapping("/board/write")
-    public String boardWrite(@RequestBody Map<String, Object> map) {
+    @PostMapping(value = "/board/write", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
+    public String boardWrite(
+            HttpServletRequest hsRequest,
+            @RequestPart("uploadFiles") MultipartFile[] files,
+            @RequestParam("boardDetail") String map) throws ParseException {
 
         BoardDTO boardDTO = new BoardDTO();
-        boardDTO.setTitle((String) map.get("title"));
-        boardDTO.setWriter(SecurityContextHolder.getContext().getAuthentication().getName());
-        boardDTO.setContent((String) map.get("content"));
 
-        boardService.boardWrite(boardDTO);
+        JSONParser jsonParser = new JSONParser();
+        System.out.println(map);
+        JSONObject obj = (JSONObject) jsonParser.parse(map);
+
+        boardDTO.setTitle((String) obj.get("title"));
+        boardDTO.setWriter(SecurityContextHolder.getContext().getAuthentication().getName());
+        boardDTO.setContent((String) obj.get("content"));
+
+        System.out.println(obj);
+        for (MultipartFile mf : files) {
+            System.out.println(mf.getOriginalFilename());
+            System.out.println(mf.getSize());
+
+            if (mf.getOriginalFilename() != null) {
+                File saveFile = new File("D:\\testFolder", mf.getOriginalFilename());
+                try {
+                    mf.transferTo(saveFile);
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+
+        }
+
+        //boardService.boardWrite(boardDTO);
 
         return "redirect:/board";
     }
@@ -103,7 +135,8 @@ public class BoardController {
                 (String) map.get("writer"),
                 (String) map.get("content"),
                 (String) map.get("regTime"),
-                (String) map.get("modTime")
+                (String) map.get("modTime"),
+                null, null
         );
 
         boardService.boardUpdate(boardDTO);

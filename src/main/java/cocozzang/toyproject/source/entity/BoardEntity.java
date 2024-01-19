@@ -24,4 +24,7 @@ public class BoardEntity {
     private String regDate;
     private String modDate;
 
+    private String originalFileName;
+    private String storedFileName;
+
 }

@@ -5,20 +5,35 @@ $(document).ready(function() {
         var header = $("meta[name='_csrf_header']").attr("content");
         var token = $("meta[name='_csrf']").attr("content");
 
+        var inputFiles = $("input[name='files']");
+        var files = inputFiles[0].files;
+
+        var attached = new FormData();
+
+        for (let i = 0; i < files.length; i++) {
+            attached.append("uploadFiles", files[i]);
+        }
+
         var tempData =
         {
             "title" : $("#title").val(),
             "content" : $("#content").val()
         };
 
+        attached.append("boardDetail", JSON.stringify(tempData));
+
         $.ajax({
                 type : "post",
                 url : "/board/write",
-                data : JSON.stringify(tempData),
+                data : attached,
                 beforeSend : function(xhr) {xhr.setRequestHeader(header, token);},
-                contentType : "application/json; charset=UTF-8",
+                processData : false,
+                contentType : false,
+                enctype : "multipart/form-data",
+                dataType : 'json',
                 success : function() {
-                    window.location.href = "/board";
+                    console.log("success");
+                    //window.location.href = "/board";
                 }
         });
     })
