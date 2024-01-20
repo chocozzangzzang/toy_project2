@@ -23,18 +23,21 @@
             </tr>
             </thead>
             <tbody>
-            {{#boardList}}
+            {{#boardMap}}
                 <tr>
-                    <th><a href="/board/{{boardId}}" style="text-decoration : none;">{{boardId}}</a></th>
-                    <th>{{title}}</th>
-                    <th>{{writer}}</th>
-                    <th>{{regTime}}</th>
-                    <th>{{modTime}}</th>
-                    <th style="padding:0px;">
-                        <img id="attached_{{boardId}}" src="/images/png-clipart-computer-icons-email-attachment-open-symbol-symbol-miscellaneous-text-thumbnail.png"
-                             style="width:50px; height:50px;"></th>
+                    <th><a href="/board/{{BoardDTO.boardId}}" style="text-decoration : none;">{{BoardDTO.boardId}}</a></th>
+                    <th>{{BoardDTO.title}}</th>
+                    <th>{{BoardDTO.writer}}</th>
+                    <th>{{BoardDTO.regTime}}</th>
+                    <th>{{BoardDTO.modTime}}</th>
+                    <th style="padding:5px;">
+                    {{#isAttached}}
+                        <img id="attached_{{BoardDTO.boardId}}" src="/images/attached_thumbnail.png"
+                             style="width:50px; height:50px;">
+                    {{/isAttached}}
+                    </th>
                 </tr>
-            {{/boardList}}
+            {{/boardMap}}
             </tbody>
         </table>
     </div>

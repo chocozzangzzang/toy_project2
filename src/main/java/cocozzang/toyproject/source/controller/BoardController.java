@@ -3,6 +3,7 @@ package cocozzang.toyproject.source.controller;
 import cocozzang.toyproject.source.dto.AttachedFileDTO;
 import cocozzang.toyproject.source.dto.BoardDTO;
 import cocozzang.toyproject.source.dto.CommentDTO;
+import cocozzang.toyproject.source.dto.TempBoardDTO;
 import cocozzang.toyproject.source.service.BoardService;
 import cocozzang.toyproject.source.service.CommentService;
 import cocozzang.toyproject.source.service.FileService;
@@ -13,6 +14,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
+import org.springframework.data.util.Pair;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
@@ -24,10 +26,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 
 import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
 
 @Controller
 public class BoardController {
@@ -45,13 +44,14 @@ public class BoardController {
     @GetMapping("/board")
     public String board(Model model) {
         List<BoardDTO> boardDTOList = boardService.boardTotal();
-        List<Boolean> attachedFileDTOList = new ArrayList<>();
-        for (BoardDTO boardDTO : boardDTOList) {
-            attachedFileDTOList.add(fileService.isFileExists(boardDTO.getBoardId()));
-        }
 
+        List<TempBoardDTO> boardmap = new ArrayList<>();
+        for (BoardDTO boardDTO : boardDTOList) {
+            boardmap.add(new TempBoardDTO(boardDTO, fileService.isFileExists(boardDTO.getBoardId())));
+        }
+        System.out.println(boardmap);
         model.addAttribute("boardList", boardDTOList);
-        model.addAttribute("attachedList", attachedFileDTOList);
+        model.addAttribute("boardMap", boardmap);
         return "board";
     }
 
@@ -83,6 +83,7 @@ public class BoardController {
         List<AttachedFileDTO> attachedFileDTOList = new ArrayList<>();
 
         System.out.println(obj);
+
         for (MultipartFile mf : files) {
             System.out.println(mf.getOriginalFilename());
             System.out.println(mf.getSize());
@@ -103,6 +104,7 @@ public class BoardController {
                 }
             }
         }
+
         System.out.println(boardDTO);
         Long bid = boardService.boardWrite(boardDTO);
 
@@ -112,6 +114,26 @@ public class BoardController {
                 fileService.fileSave(attachedFileDTO);
             }
         }
+
+        return "redirect:/board";
+    }
+
+    @Transactional
+    @ResponseBody
+    @PostMapping(value = "/board/write2")
+    public String boardWrite2(
+            HttpServletRequest hsRequest,
+            @RequestBody Map<String, Object> obj) throws ParseException {
+
+        BoardDTO boardDTO = new BoardDTO();
+
+        boardDTO.setTitle((String) obj.get("title"));
+        boardDTO.setWriter(SecurityContextHolder.getContext().getAuthentication().getName());
+        boardDTO.setContent((String) obj.get("content"));
+
+        System.out.println(obj);
+        System.out.println(boardDTO);
+        Long bid = boardService.boardWrite(boardDTO);
 
         return "redirect:/board";
     }

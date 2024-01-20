@@ -24,21 +24,38 @@ $(document).ready(function() {
 
         attached.append("boardDetail", JSON.stringify(tempData));
 
-        $.ajax({
-                type : "post",
-                url : "/board/write",
-                data : attached,
-                beforeSend : function(xhr) {xhr.setRequestHeader(header, token);},
-                processData : false,
-                contentType : false,
-                enctype : "multipart/form-data",
-                success : function() {
-                    console.log("success");
-                    window.location.href = "/board";
-                }, fail : function() {
-                    console.log("failed");
-                }
-        });
+        if (files.length > 0) {
+            $.ajax({
+                        type : "post",
+                        url : "/board/write",
+                        data : attached,
+                        beforeSend : function(xhr) {xhr.setRequestHeader(header, token);},
+                        processData : false,
+                        contentType : false,
+                        enctype : "multipart/form-data",
+                        success : function() {
+                            console.log("success");
+                            window.location.href = "/board";
+                        }, fail : function() {
+                            console.log("failed");
+                        }
+            });
+        } else {
+            $.ajax({
+                        type : "post",
+                        url : "/board/write2",
+                        data : JSON.stringify(tempData),
+                        beforeSend : function(xhr) {xhr.setRequestHeader(header, token);},
+                        contentType : "application/json; charset=UTF-8",
+                        success : function() {
+                            console.log("success");
+                            window.location.href = "/board";
+                            },
+                        fail : function() {
+                            console.log("failed");
+                        }
+            });
+        }
     })
 
     $("#btn-delete").click(function() {
