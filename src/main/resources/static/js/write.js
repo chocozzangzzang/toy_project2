@@ -1,5 +1,7 @@
 
 $(document).ready(function() {
+
+
     $("#btn-save").click(function() {
 
         var header = $("meta[name='_csrf_header']").attr("content");
@@ -30,10 +32,11 @@ $(document).ready(function() {
                 processData : false,
                 contentType : false,
                 enctype : "multipart/form-data",
-                dataType : 'json',
                 success : function() {
                     console.log("success");
-                    //window.location.href = "/board";
+                    window.location.href = "/board";
+                }, fail : function() {
+                    console.log("failed");
                 }
         });
     })

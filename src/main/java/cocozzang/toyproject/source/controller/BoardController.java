@@ -1,9 +1,11 @@
 package cocozzang.toyproject.source.controller;
 
+import cocozzang.toyproject.source.dto.AttachedFileDTO;
 import cocozzang.toyproject.source.dto.BoardDTO;
 import cocozzang.toyproject.source.dto.CommentDTO;
 import cocozzang.toyproject.source.service.BoardService;
 import cocozzang.toyproject.source.service.CommentService;
+import cocozzang.toyproject.source.service.FileService;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -14,6 +16,7 @@ import org.json.simple.parser.ParseException;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
@@ -21,24 +24,34 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.UUID;
 
 @Controller
 public class BoardController {
 
     private final BoardService boardService;
     private final CommentService commentService;
+    private final FileService fileService;
 
-    public BoardController(BoardService boardService, CommentService commentService) {
+    public BoardController(BoardService boardService, CommentService commentService, FileService fileService) {
         this.boardService = boardService;
         this.commentService = commentService;
+        this.fileService = fileService;
     }
 
     @GetMapping("/board")
     public String board(Model model) {
         List<BoardDTO> boardDTOList = boardService.boardTotal();
+        List<Boolean> attachedFileDTOList = new ArrayList<>();
+        for (BoardDTO boardDTO : boardDTOList) {
+            attachedFileDTOList.add(fileService.isFileExists(boardDTO.getBoardId()));
+        }
+
         model.addAttribute("boardList", boardDTOList);
+        model.addAttribute("attachedList", attachedFileDTOList);
         return "board";
     }
 
@@ -49,6 +62,7 @@ public class BoardController {
         return "boardWrite";
     }
 
+    @Transactional
     @ResponseBody
     @PostMapping(value = "/board/write", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public String boardWrite(
@@ -66,23 +80,38 @@ public class BoardController {
         boardDTO.setWriter(SecurityContextHolder.getContext().getAuthentication().getName());
         boardDTO.setContent((String) obj.get("content"));
 
+        List<AttachedFileDTO> attachedFileDTOList = new ArrayList<>();
+
         System.out.println(obj);
         for (MultipartFile mf : files) {
             System.out.println(mf.getOriginalFilename());
             System.out.println(mf.getSize());
 
+            UUID uuid = UUID.randomUUID();
+            String savedFileName = uuid + "_" + mf.getOriginalFilename();
+
             if (mf.getOriginalFilename() != null) {
-                File saveFile = new File("D:\\testFolder", mf.getOriginalFilename());
+                File saveFile = new File("D:\\testFolder", savedFileName);
                 try {
                     mf.transferTo(saveFile);
+                    AttachedFileDTO attachedFileDTO = new AttachedFileDTO();
+                    attachedFileDTO.setStoredFileName(savedFileName);
+                    attachedFileDTO.setOriginalFileName(mf.getOriginalFilename());
+                    attachedFileDTOList.add(attachedFileDTO);
                 } catch (Exception e) {
                     System.out.println(e.getMessage());
                 }
             }
-
         }
+        System.out.println(boardDTO);
+        Long bid = boardService.boardWrite(boardDTO);
 
-        //boardService.boardWrite(boardDTO);
+        if (attachedFileDTOList.size() > 0) {
+            for (AttachedFileDTO attachedFileDTO : attachedFileDTOList) {
+                attachedFileDTO.setBid(bid);
+                fileService.fileSave(attachedFileDTO);
+            }
+        }
 
         return "redirect:/board";
     }
@@ -135,8 +164,7 @@ public class BoardController {
                 (String) map.get("writer"),
                 (String) map.get("content"),
                 (String) map.get("regTime"),
-                (String) map.get("modTime"),
-                null, null
+                (String) map.get("modTime")
         );
 
         boardService.boardUpdate(boardDTO);

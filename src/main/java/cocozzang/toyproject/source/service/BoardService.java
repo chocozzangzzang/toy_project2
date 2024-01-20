@@ -19,7 +19,7 @@ public class BoardService {
         this.boardRepository = boardRepository;
     }
 
-    public void boardWrite(BoardDTO boardDTO) {
+    public Long boardWrite(BoardDTO boardDTO) {
 
         BoardEntity boardEntity = new BoardEntity();
 
@@ -29,7 +29,9 @@ public class BoardService {
         boardEntity.setRegDate(String.valueOf(LocalDate.now()));
         boardEntity.setModDate(String.valueOf(LocalDate.now()));
 
-        boardRepository.save(boardEntity);
+        System.out.println("XXXX :: " + boardEntity);
+
+        return boardRepository.save(boardEntity).getId();
     }
 
     public List<BoardDTO> boardTotal() {

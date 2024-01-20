@@ -19,6 +19,7 @@
                 <th>Writer</th>
                 <th>Write Date</th>
                 <th>Modify Date</th>
+                <th>Attached File</th>
             </tr>
             </thead>
             <tbody>
@@ -29,6 +30,9 @@
                     <th>{{writer}}</th>
                     <th>{{regTime}}</th>
                     <th>{{modTime}}</th>
+                    <th style="padding:0px;">
+                        <img id="attached_{{boardId}}" src="/images/png-clipart-computer-icons-email-attachment-open-symbol-symbol-miscellaneous-text-thumbnail.png"
+                             style="width:50px; height:50px;"></th>
                 </tr>
             {{/boardList}}
             </tbody>

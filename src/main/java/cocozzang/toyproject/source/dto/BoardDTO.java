@@ -3,8 +3,6 @@ package cocozzang.toyproject.source.dto;
 import cocozzang.toyproject.source.entity.BoardEntity;
 import lombok.*;
 
-import java.time.LocalDateTime;
-
 @Getter
 @Setter
 @ToString
@@ -20,9 +18,6 @@ public class BoardDTO {
     private String regTime;
     private String modTime;
 
-    private String originalFileName;
-    private String storedFileName;
-
     public static BoardDTO entityToDTO(BoardEntity boardEntity) {
         return BoardDTO.builder()
                 .boardId(boardEntity.getId())
@@ -31,8 +26,6 @@ public class BoardDTO {
                 .content(boardEntity.getContent())
                 .regTime(boardEntity.getRegDate())
                 .modTime(boardEntity.getModDate())
-                .originalFileName(boardEntity.getOriginalFileName())
-                .storedFileName(boardEntity.getStoredFileName())
                 .build();
     }
 }
