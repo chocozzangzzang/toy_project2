@@ -31,4 +31,19 @@ public class FileService {
         else return true;
     }
 
+    public List<AttachedFileDTO> findAllFiles(Long bid) {
+
+        List<AttachedFileDTO> tempDTOS = new ArrayList<>();
+        List<AttachedFileEntity> attachedFileEntityList = fileRepository.findByBid(bid);
+
+        for (AttachedFileEntity attachedFileEntity : attachedFileEntityList) {
+            AttachedFileDTO attachedFileDTO = new AttachedFileDTO();
+            attachedFileDTO.setOriginalFileName(attachedFileEntity.getOriginalFileName());
+            attachedFileDTO.setStoredFileName(attachedFileEntity.getStoredFileName());
+            tempDTOS.add(attachedFileDTO);
+        }
+
+        return tempDTOS;
+    }
+
 }

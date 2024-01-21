@@ -151,6 +151,17 @@ public class BoardController {
         model.addAttribute("comments", commentDTO);
         model.addAttribute("nowUser", SecurityContextHolder.getContext().getAuthentication().getName());
 
+        List<AttachedFileDTO> attachedFileDTOList = fileService.findAllFiles(bid);
+
+        if (attachedFileDTOList.size() > 0) {
+            model.addAttribute("fileExists", true);
+            model.addAttribute("files", attachedFileDTOList);
+        } else {
+            model.addAttribute("fileExists", false);
+        }
+
+
+
         return "boardDetail";
     }
 
