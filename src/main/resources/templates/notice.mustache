@@ -1,0 +1,37 @@
+{{>layout/header}}
+
+    <h1>Spring Boot Notice</h1>
+
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-6">
+                <h3>==공 지 사 항==</h3>
+                <br>
+                <a role="button" href="/notice/write">WRITE</a>
+            </div>
+        </div>
+        <br>
+        <table class="table table-horizontal table-bordered">
+            <thead class="thead-strong">
+            <tr>
+                <th>#NO</th>
+                <th>Title</th>
+                <th>Write Date</th>
+                <th>Modify Date</th>
+            </tr>
+            </thead>
+            <tbody>
+            {{#noticeList}}
+                <tr>
+                    <th><a href="/board/{{nid}}" style="text-decoration:none;">{{nid}}</a></th>
+                    <th>{{noticeTitle}}</th>
+                    <th>{{noticeContent}}</th>
+                    <th>{{regTime}}</th>
+                    <th>{{modTime}}</th>
+                </tr>
+            {{/noticeList}}
+            </tbody>
+        </table>
+    </div>
+
+{{>layout/footer}}

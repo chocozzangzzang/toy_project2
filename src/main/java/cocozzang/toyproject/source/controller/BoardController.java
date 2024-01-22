@@ -170,6 +170,20 @@ public class BoardController {
     public void boardDetail(@RequestParam(value="bid") Long bid) {
         boardService.boardDelete(bid);
         commentService.commentDeleteByBid(bid);
+
+        List<AttachedFileDTO> attachedFileDTOList = fileService.findAllFiles(bid);
+        fileService.deleteAllFiles(bid);
+
+        for (AttachedFileDTO attachedFileDTO : attachedFileDTOList) {
+            File file = new File("D:/testfolder/" + attachedFileDTO.getStoredFileName());
+            if (file.exists()) {
+                if (file.delete()) {
+                    System.out.println(attachedFileDTO.getOriginalFileName() + " is deleted !!");
+                } else {
+                    System.out.println(attachedFileDTO.getOriginalFileName() + " is not deleted !!");
+                }
+            }
+        }
     }
 
     @ResponseBody

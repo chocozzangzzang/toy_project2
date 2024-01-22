@@ -46,4 +46,10 @@ public class FileService {
         return tempDTOS;
     }
 
+    public void deleteAllFiles(Long bid) {
+
+        fileRepository.deleteByBid(bid);
+
+    }
+
 }

@@ -1,0 +1,24 @@
+{{>layout/header}}
+<meta name="_csrf" content="{{_csrf.token}}"/>
+<meta name="_csrf_header" content="{{_csrf.headerName}}"/>
+
+<h1>공지사항 등록</h1>
+
+<div class="col-md-12">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="noticeTitle">제목</label>
+                <input type="text" class="form-control" id="noticeTitle" placeholder="제목을 입력하세요">
+            </div>
+            <div class="form-group">
+                <label for="noticeContent"> 내용</label>
+                <textarea type="text" class="form-control" id="noticeContent" placeholder="내용을 입력하세요"></textarea>
+            </div>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+        </form>
+        <a href="/notice" role="button" class="btn btn-secondary">취소</a>
+        <button type="button" class="btn btn-primary" id="btn-notice-save">등록</button>
+    </div>
+</div>
+{{>layout/footer}}

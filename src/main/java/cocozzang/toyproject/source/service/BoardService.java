@@ -3,6 +3,7 @@ package cocozzang.toyproject.source.service;
 import cocozzang.toyproject.source.dto.BoardDTO;
 import cocozzang.toyproject.source.entity.BoardEntity;
 import cocozzang.toyproject.source.repository.BoardRepository;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
@@ -35,7 +36,7 @@ public class BoardService {
     }
 
     public List<BoardDTO> boardTotal() {
-        List<BoardEntity> boardEntities = boardRepository.findAll();
+        List<BoardEntity> boardEntities = boardRepository.findAll(Sort.by(Sort.Direction.DESC, "id"));
         List<BoardDTO> boardDTOS = new ArrayList<>();
         for(int i = 0; i < boardEntities.size(); i++) {
             boardDTOS.add(BoardDTO.entityToDTO(boardEntities.get(i)));
