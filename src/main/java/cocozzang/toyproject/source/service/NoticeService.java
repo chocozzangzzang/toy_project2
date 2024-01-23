@@ -20,7 +20,7 @@ public class NoticeService {
 
     public void noticeWrite(NoticeDTO noticeDTO) {
         NoticeEntity noticeEntity = new NoticeEntity();
-
+        noticeEntity.setNoticeWriter(noticeDTO.getNoticeWriter());
         noticeEntity.setNoticeTitle(noticeDTO.getNoticeTitle());
         noticeEntity.setNoticeContent(noticeDTO.getNoticeContent());
         noticeEntity.setRegTime(noticeDTO.getRegTime());
@@ -42,4 +42,27 @@ public class NoticeService {
         return noticeDTOList;
     }
 
+
+    public NoticeDTO getNotice(Long nid) {
+        NoticeEntity noticeEntity = noticeRepository.findById(nid).get();
+        NoticeDTO noticeDTO = NoticeDTO.entityToDTO(noticeEntity);
+        return noticeDTO;
+    }
+
+    public void deleteNotice(Long nid) {
+        noticeRepository.deleteById(nid);
+    }
+
+    public void modifyNotice(NoticeDTO noticeDTO) {
+        NoticeEntity noticeEntity = new NoticeEntity();
+
+        noticeEntity.setId(noticeDTO.getNid());
+        noticeEntity.setNoticeWriter(noticeDTO.getNoticeWriter());
+        noticeEntity.setNoticeContent(noticeDTO.getNoticeContent());
+        noticeEntity.setNoticeTitle(noticeDTO.getNoticeTitle());
+        noticeEntity.setRegTime(noticeDTO.getRegTime());
+        noticeEntity.setModTime(noticeDTO.getModTime());
+
+        noticeRepository.save(noticeEntity);
+    }
 }

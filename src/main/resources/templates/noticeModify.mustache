@@ -1,0 +1,32 @@
+{{>layout/header}}
+<meta name="_csrf" content="{{_csrf.token}}"/>
+<meta name="_csrf_header" content="{{_csrf.headerName}}"/>
+
+<h1>공지사항 수정</h1>
+
+<div class="col-md-12">
+    <div class="col-md-4">
+        <form>
+            <div class="form-group">
+                <label for="noticeTitle">제목</label>
+                <input type="text" class="form-control" id="noticeTitle" value="{{notice.noticeTitle}}">
+            </div>
+            <div class="form-group">
+                <label for="noticeWriter"> 작성자</label>
+                <input type="text" class="form-control" id="noticeWriter" value="{{notice.noticeWriter}}" readonly>
+            </div>
+            <div class="form-group">
+                <label for="noticeContent">내용</label>
+                <textarea type="text" class="form-control" id="noticeContent">{{notice.noticeContent}}</textarea>
+            </div>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}">
+            <input type="hidden" id="nowUser" value="{{nowUser}}">
+            <input type="hidden" id="nid" value="{{notice.nid}}">
+            <input type="hidden" id="noticeRegTime" value="{{notice.regTime}}">
+            <input type="hidden" id="noticeModTime" value="{{notice.modTime}}">
+        </form>
+        <a href="/notice/{{notice.nid}}" role="button" class="btn btn-secondary">수정취소</a>
+        <button type="button" class="btn btn-primary" id="btn-notice-modifyConfirm">수정</button>
+    </div>
+</div>
+{{>layout/footer}}

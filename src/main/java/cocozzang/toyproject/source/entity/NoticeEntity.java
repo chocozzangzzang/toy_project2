@@ -14,6 +14,7 @@ public class NoticeEntity {
         @GeneratedValue(strategy = GenerationType.IDENTITY)
         private Long id;
 
+        private String noticeWriter;
         private String noticeTitle;
         private String noticeContent;
         private String regTime;

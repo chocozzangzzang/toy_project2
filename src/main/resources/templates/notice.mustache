@@ -15,6 +15,7 @@
             <thead class="thead-strong">
             <tr>
                 <th>#NO</th>
+                <th>Writer</th>
                 <th>Title</th>
                 <th>Write Date</th>
                 <th>Modify Date</th>
@@ -23,9 +24,9 @@
             <tbody>
             {{#noticeList}}
                 <tr>
-                    <th><a href="/board/{{nid}}" style="text-decoration:none;">{{nid}}</a></th>
+                    <th><a href="/notice/{{nid}}" style="text-decoration:none;">{{nid}}</a></th>
+                    <th>{{noticeWriter}}</th>
                     <th>{{noticeTitle}}</th>
-                    <th>{{noticeContent}}</th>
                     <th>{{regTime}}</th>
                     <th>{{modTime}}</th>
                 </tr>

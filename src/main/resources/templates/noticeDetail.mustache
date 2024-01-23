@@ -1,0 +1,22 @@
+{{>layout/header}}
+<meta name="_csrf" content="{{_csrf.token}}"/>
+<meta name="_csrf_header" content="{{_csrf.headerName}}"/>
+<h3><a href="/notice">공지사항 목록으로 돌아가기</a></h3>
+<hr>
+<h3>공 지 사 항</h3>
+<br>
+<h3>게시글 번호 : # {{notice.nid}}</h3>
+<br>
+<h5>게시글 제목 : {{notice.noticeTitle}}</h5>
+<br>
+<h5>작 성 자 : {{notice.noticeWriter}}</h5>
+<br>
+<h5>게시글 내용 : {{notice.noticeContent}}</h5>
+<br>
+<button type="button" class="btn btn-primary" id="btn-notice-delete">삭제</button>
+<button type="button" class="btn btn-primary" id="btn-notice-modify">수정</button>
+<input type="hidden" id="nid" value="{{notice.nid}}"/>
+<input type="hidden" id="noticeWriter" value="{{notice.noticeWriter}}"/>
+<input type="hidden" id="nowId" value="{{nowId}}"/>
+<hr>
+{{>layout/footer}}
