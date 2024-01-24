@@ -87,6 +87,8 @@ public class NoticeController {
     @PutMapping("/notice/modify")
     public void noticeModify(@RequestBody Map<String, Object> map) {
 
+        System.out.println("PutMapping!!!!");
+
         NoticeDTO noticeDTO = noticeService.getNotice(Long.valueOf((String) map.get("noticeId")));
 
         noticeDTO.setNoticeTitle((String) map.get("noticeModifyTitle"));
