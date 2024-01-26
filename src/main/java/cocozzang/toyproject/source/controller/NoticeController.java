@@ -2,6 +2,8 @@ package cocozzang.toyproject.source.controller;
 
 import cocozzang.toyproject.source.dto.NoticeDTO;
 import cocozzang.toyproject.source.service.NoticeService;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -9,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
 
 import java.awt.*;
 import java.time.LocalDate;
+import java.util.*;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class NoticeController {
@@ -19,6 +21,7 @@ public class NoticeController {
 
     public NoticeController(NoticeService noticeService) {
         this.noticeService = noticeService;
+
     }
 
     @GetMapping("/notice")
@@ -26,15 +29,37 @@ public class NoticeController {
 
         List<NoticeDTO> noticeDTOList = noticeService.getAllNotices();
 
-        model.addAttribute("noticeList", noticeDTOList);
-        return "notice";
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Collection<? extends GrantedAuthority> collection = auth.getAuthorities();
+        Iterator<? extends GrantedAuthority> iterator = collection.iterator();
+        GrantedAuthority grantedAuthority = iterator.next();
+        String role = grantedAuthority.getAuthority();
+
+        if (Objects.equals(role, "ROLE_ADMIN")) {
+            model.addAttribute("noticeList", noticeDTOList);
+            return "notice";
+        } else {
+            return "redirect:/board";
+        }
     }
 
     @GetMapping("/notice/write")
     public String noticeWritePage(Model model) {
 
-        model.addAttribute("noticeWriter", SecurityContextHolder.getContext().getAuthentication().getName());
-        return "noticeWrite";
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Collection<? extends GrantedAuthority> collection = auth.getAuthorities();
+        Iterator<? extends GrantedAuthority> iterator = collection.iterator();
+        GrantedAuthority grantedAuthority = iterator.next();
+        String role = grantedAuthority.getAuthority();
+
+        if (Objects.equals(role, "ROLE_ADMIN")) {
+            model.addAttribute("noticeWriter", SecurityContextHolder.getContext().getAuthentication().getName());
+            return "noticeWrite";
+        } else {
+            return "redirect:/board";
+        }
+
+
     }
 
 
@@ -60,42 +85,83 @@ public class NoticeController {
 
         NoticeDTO noticeDTO = noticeService.getNotice(nid);
 
-        model.addAttribute("nowId", SecurityContextHolder.getContext().getAuthentication().getName());
-        model.addAttribute("notice", noticeDTO);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Collection<? extends GrantedAuthority> collection = auth.getAuthorities();
+        Iterator<? extends GrantedAuthority> iterator = collection.iterator();
+        GrantedAuthority grantedAuthority = iterator.next();
+        String role = grantedAuthority.getAuthority();
 
-        return "noticeDetail";
+        if (Objects.equals(role, "ROLE_ADMIN")) {
+            model.addAttribute("nowId", SecurityContextHolder.getContext().getAuthentication().getName());
+            model.addAttribute("notice", noticeDTO);
+            return "noticeDetail";
+        } else {
+            return "redirect:/board";
+        }
     }
 
     @ResponseBody
     @DeleteMapping("/notice/delete")
-    public void noticeDelete(@RequestParam(value="nid") Long nid) {
+    public String noticeDelete(@RequestParam(value="nid") Long nid) {
 
-        System.out.println("DELETE : " + nid);
-        noticeService.deleteNotice(nid);
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Collection<? extends GrantedAuthority> collection = auth.getAuthorities();
+        Iterator<? extends GrantedAuthority> iterator = collection.iterator();
+        GrantedAuthority grantedAuthority = iterator.next();
+        String role = grantedAuthority.getAuthority();
+
+        if (Objects.equals(role, "ROLE_ADMIN")) {
+            noticeService.deleteNotice(nid);
+            return null;
+        } else {
+            return "redirect:/board";
+        }
+
     }
 
     @GetMapping("/notice/modifyPage")
     public String noticeModifyPage(@RequestParam(value = "nid") Long nid, Model model) {
-        System.out.println(nid);
-        NoticeDTO noticeDTO = noticeService.getNotice(nid);
-        model.addAttribute("nowUser", SecurityContextHolder.getContext().getAuthentication().getName());
-        model.addAttribute("notice", noticeDTO);
-        return "noticeModify";
+
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Collection<? extends GrantedAuthority> collection = auth.getAuthorities();
+        Iterator<? extends GrantedAuthority> iterator = collection.iterator();
+        GrantedAuthority grantedAuthority = iterator.next();
+        String role = grantedAuthority.getAuthority();
+
+        if (Objects.equals(role, "ROLE_ADMIN")) {
+            NoticeDTO noticeDTO = noticeService.getNotice(nid);
+            model.addAttribute("nowUser", SecurityContextHolder.getContext().getAuthentication().getName());
+            model.addAttribute("notice", noticeDTO);
+            return "noticeModify";
+        } else {
+            return "redirect:/board";
+        }
+
     }
 
     @ResponseBody
     @PutMapping("/notice/modify")
-    public void noticeModify(@RequestBody Map<String, Object> map) {
+    public String noticeModify(@RequestBody Map<String, Object> map) {
 
-        System.out.println("PutMapping!!!!");
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        Collection<? extends GrantedAuthority> collection = auth.getAuthorities();
+        Iterator<? extends GrantedAuthority> iterator = collection.iterator();
+        GrantedAuthority grantedAuthority = iterator.next();
+        String role = grantedAuthority.getAuthority();
 
-        NoticeDTO noticeDTO = noticeService.getNotice(Long.valueOf((String) map.get("noticeId")));
+        if (Objects.equals(role, "ROLE_ADMIN")) {
+            NoticeDTO noticeDTO = noticeService.getNotice(Long.valueOf((String) map.get("noticeId")));
 
-        noticeDTO.setNoticeTitle((String) map.get("noticeModifyTitle"));
-        noticeDTO.setNoticeWriter((String) map.get("noticeWriter"));
-        noticeDTO.setNoticeContent((String) map.get("noticeModifyContent"));
-        noticeDTO.setModTime(String.valueOf(LocalDate.now()));
+            noticeDTO.setNoticeTitle((String) map.get("noticeModifyTitle"));
+            noticeDTO.setNoticeWriter((String) map.get("noticeWriter"));
+            noticeDTO.setNoticeContent((String) map.get("noticeModifyContent"));
+            noticeDTO.setModTime(String.valueOf(LocalDate.now()));
 
-        noticeService.modifyNotice(noticeDTO);
+            noticeService.modifyNotice(noticeDTO);
+
+            return null;
+        } else {
+            return "redirect:/board";
+        }
     }
 }

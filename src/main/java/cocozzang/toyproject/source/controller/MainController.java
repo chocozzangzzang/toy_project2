@@ -44,6 +44,12 @@ public class MainController {
         GrantedAuthority grantedAuthority = iterator.next();
         String role = grantedAuthority.getAuthority();
 
+        if(Objects.equals(role, "ROLE_ADMIN")) {
+            model.addAttribute("ADMIN", true);
+        } else {
+            model.addAttribute("ADMIN", false);
+        }
+
         UserDTO userdata = new UserDTO();
         List<HexaDTO> hexaDTOList = new ArrayList<>();
         if (!Objects.equals(id, "anonymousUser")) {

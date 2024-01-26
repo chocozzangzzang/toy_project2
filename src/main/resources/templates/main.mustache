@@ -31,5 +31,7 @@
 </div>
 <hr>
 <a role="button" href="/board">게시판</a>
-<a role="button" href="/notice">공지사항</a>
+{{#ADMIN}}
+    <a role="button" href="/notice">공지사항</a>
+{{/ADMIN}}
 {{>layout/footer}}
