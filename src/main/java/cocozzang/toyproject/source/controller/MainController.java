@@ -56,6 +56,8 @@ public class MainController {
 
             userdata = userService.rtUser(id);
 
+            model.addAttribute("login", true);
+
             String url = "https://open.api.nexon.com/maplestory/";
             URI uri = UriComponentsBuilder.fromHttpUrl(url)
                     .path("v1/id")
@@ -107,7 +109,7 @@ public class MainController {
                 hexaDTOList.add(hexaDTO);
             }
 
-        }
+        } else {model.addAttribute("login", false);}
 
         model.addAttribute("id", id);
         model.addAttribute("role", role);

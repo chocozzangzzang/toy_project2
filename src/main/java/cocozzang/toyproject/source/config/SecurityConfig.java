@@ -17,6 +17,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
 import org.springframework.security.web.DefaultSecurityFilterChain;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
 
 import java.nio.file.Path;
 
@@ -74,7 +75,11 @@ public class SecurityConfig {
         // 커스텀 로그인 - formLogin 방식
         http
                    .formLogin((auth) -> auth.loginPage("/login")
-                        .loginProcessingUrl("/loginProc").permitAll().defaultSuccessUrl("/"));
+                        .loginProcessingUrl("/loginProc").permitAll().defaultSuccessUrl("/"))
+                    .logout((logout) -> logout
+                            .logoutRequestMatcher(new AntPathRequestMatcher("/logout"))
+                            .logoutSuccessUrl("/")
+                            .invalidateHttpSession(true));
 
         // Http Basic 인증 방식 -- 아이디와 비밀번호를 Base64 방식으로 인토딩하여
         // HTTP인증 헤더 뒤에 부착하여 서버측으로 요청을 보내는 방식

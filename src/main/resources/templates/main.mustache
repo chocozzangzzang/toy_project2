@@ -1,5 +1,12 @@
 {{>layout/header}}
-===MAIN PAGE=== <a href="/login">로그인</a>
+===MAIN PAGE===
+<hr>
+{{^login}}
+    <a href="/login" style="text-decoration:none;">로그인</a>
+{{/login}}
+{{#login}}
+    <a href="/logout" style="text-decoration:none;">로그아웃</a>
+{{/login}}
 <hr>
 <p>ID : {{id}}</p>
 <hr>
