@@ -23,6 +23,8 @@ public class ErrorHandler implements ErrorController {
             } else if (statusCode == HttpStatus.NOT_FOUND.value()) {
                 model.addAttribute("errorCode", "error_404");
             }
+        } else {
+            model.addAttribute("errorCode", "Not Completed Error Page");
         }
 
         return "errorPage";
